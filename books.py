@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.messagebox import showerror
 import database
 
 
@@ -33,11 +34,14 @@ def search_command():
 
 
 def add_command():
-    database.insert(title_text.get(), author_text.get(),
-                    year_text.get(), isbn_text.get())
-    list1.delete(0, END)
-    list1.insert(END, (title_text.get(), author_text.get(),
-                 year_text.get(), isbn_text.get()))
+    try:
+        database.insert(title_text.get(), author_text.get(),
+                        int(str(year_text.get())[:4]), isbn_text.get())
+        list1.delete(0, END)
+        list1.insert(END, (title_text.get(), author_text.get(),
+                           int(str(year_text.get())[:4]), isbn_text.get()))
+    except TclError:
+        showerror("Year Error", "Year value inputted must be an integer.")
 
 
 def delete_command():
@@ -73,7 +77,7 @@ author_text = StringVar()
 e2 = Entry(window, textvariable=author_text)
 e2.grid(row=0, column=3)
 
-year_text = StringVar()
+year_text = IntVar()
 e3 = Entry(window, textvariable=year_text)
 e3.grid(row=1, column=1)
 
